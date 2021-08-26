@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, text, input, ul, li)
+import Html exposing (Html, button, span, div, text, input, ul, li)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
 
@@ -38,8 +38,14 @@ update msg model =
       {model | textfield = newtextfield}
     Add ->
       {model | entries = (Entry model.textfield False) :: model.entries }
-    Done _ ->
-      model
+    Done index ->
+      {
+        model | 
+        entries = List.indexedMap (\ i entry -> 
+                                      if i == index 
+                                      then {entry | done = True} 
+                                      else entry) model.entries
+      }
 
 
 
@@ -51,18 +57,21 @@ view model =
   , button [onClick Add] [text "Add"]
   , div [] [text model.textfield]
   , div []
-    [ ul [] 
+    [ ul []
       (List.indexedMap (\ i entry -> todoEntry i entry) model.entries)
     ]
   ]
 
 
-
+todoEntry : Int -> Entry -> Html Msg
 todoEntry i entry =
   li [] [
     div [] 
-    [ text entry.text
-      , button [onClick (Done i)] [text "done"]   
+    [ span [style "text-decoration" (if entry.done then "line-through" else "none") ] [ text entry.text]
+      , button [onClick (Done i)] [text "done"]
     ]
     
     ]
+
+
+
