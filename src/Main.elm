@@ -64,7 +64,6 @@ view model =
   div [] 
   [ input [ placeholder "Todo", value model.textfield, onInput TextUpdate] []
   , button [onClick Add] [text "Add"]
-  , div [] [text (String.fromInt model.nextId)]
   , div []
     [ ul []
       (List.map (\ entry -> todoEntry entry) model.entries)
