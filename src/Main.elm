@@ -43,6 +43,7 @@ update msg model =
       {
         model | entries = (Entry model.textfield False model.nextId) :: model.entries 
               , nextId = model.nextId + 1
+              , textfield = ""
       }
     Done id ->
       {
